@@ -19,7 +19,7 @@ const float FIELD_OF_VIEW = 60.0;
 int main(int argc, char** argv)
 {
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);
+	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 
 	glutInitWindowPosition(0, 0);
 	glutInitWindowSize(1000, 1000);
@@ -27,6 +27,7 @@ int main(int argc, char** argv)
 
 	glutCreateWindow("3D Animation");
 	glutDisplayFunc(display);
+	glutReshapeFunc(reshape);
 	glutTimerFunc(TIME_PER_FRAME, timer, 0);
 
 	init();
@@ -38,16 +39,22 @@ int main(int argc, char** argv)
 
 void init()
 {
-	glClearColor(1.0, 1.0, 0.0, 0.8);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClearColor(0.0, 0.0, 0.0, 1.0);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_LIGHTING);  
+	glEnable(GL_LIGHT0);      
+
+	// Optional: define light properties
+	GLfloat light_pos[] = { 0.0f, 5.0f, -2.0f, 1.0f };
+	glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
 }
 
 void display()
 {
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
-	switch (sceneNumber)
+	/*switch (sceneNumber)
 	{
 		case 1: sceneNumber += scene1();
 				break;	
@@ -67,8 +74,10 @@ void display()
 				break;
 		case 9: sceneNumber += scene9();
 				break;
-	}
-		
+	}*/
+
+	scene1();
+	
 
 	glutSwapBuffers();
 }
