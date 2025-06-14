@@ -38,7 +38,16 @@ void drawCylinder(float radius, float height)
 
 void drawSphere(float radius)
 {
+    const int slices = 36; // horizontal divisions (like longitude)
+    const int stacks = 18; // vertical divisions (like latitude)
 
+    GLUquadric* quad = gluNewQuadric();
+
+    glPushMatrix();
+    gluSphere(quad, radius, slices, stacks);  // draw the sphere
+    glPopMatrix();
+
+    gluDeleteQuadric(quad);
 }
 
 void drawHemisphere(float radius) {
@@ -74,8 +83,57 @@ void drawHemisphereWithNeck(float radius, float neckHeight) {
     glPopMatrix();
 }
 
-void drawCube(float length, float width, float heigth)
+void drawCube(float length, float width, float height)
 {
+    float lx = length / 2.0f;
+    float ly = height / 2.0f;
+    float lz = width / 2.0f;
+
+    glBegin(GL_QUADS);
+
+    // Front face
+    glNormal3f(0, 0, 1);
+    glVertex3f(-lx, -ly, lz);
+    glVertex3f(lx, -ly, lz);
+    glVertex3f(lx, ly, lz);
+    glVertex3f(-lx, ly, lz);
+
+    // Back face
+    glNormal3f(0, 0, -1);
+    glVertex3f(-lx, -ly, -lz);
+    glVertex3f(-lx, ly, -lz);
+    glVertex3f(lx, ly, -lz);
+    glVertex3f(lx, -ly, -lz);
+
+    // Left face
+    glNormal3f(-1, 0, 0);
+    glVertex3f(-lx, -ly, -lz);
+    glVertex3f(-lx, -ly, lz);
+    glVertex3f(-lx, ly, lz);
+    glVertex3f(-lx, ly, -lz);
+
+    // Right face
+    glNormal3f(1, 0, 0);
+    glVertex3f(lx, -ly, -lz);
+    glVertex3f(lx, ly, -lz);
+    glVertex3f(lx, ly, lz);
+    glVertex3f(lx, -ly, lz);
+
+    // Top face
+    glNormal3f(0, 1, 0);
+    glVertex3f(-lx, ly, -lz);
+    glVertex3f(-lx, ly, lz);
+    glVertex3f(lx, ly, lz);
+    glVertex3f(lx, ly, -lz);
+
+    // Bottom face
+    glNormal3f(0, -1, 0);
+    glVertex3f(-lx, -ly, -lz);
+    glVertex3f(lx, -ly, -lz);
+    glVertex3f(lx, -ly, lz);
+    glVertex3f(-lx, -ly, lz);
+
+    glEnd();
 
 }
 

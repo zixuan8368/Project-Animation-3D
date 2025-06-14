@@ -130,11 +130,15 @@
     <ClCompile Include="basicshape.cpp" />
     <ClCompile Include="characters.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Object.cpp" />
+    <ClCompile Include="room.cpp" />
     <ClCompile Include="scene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="basicshape.h" />
     <ClInclude Include="characters.h" />
+    <ClInclude Include="Object.h" />
+    <ClInclude Include="room.h" />
     <ClInclude Include="scene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

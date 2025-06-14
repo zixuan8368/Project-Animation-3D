@@ -12,7 +12,7 @@ int sceneNumber = 1;
 const int TOTAL_SCENE = 9;
 const int FRAME_PER_SECOND = 60;
 const int TIME_PER_FRAME = 1000 / FRAME_PER_SECOND;
-const float FIELD_OF_VIEW = 60.0;
+const float FIELD_OF_VIEW = 70.0;
 
 
 
@@ -40,12 +40,15 @@ int main(int argc, char** argv)
 void init()
 {
 	glClearColor(0.0, 0.0, 0.0, 1.0);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);  
-	glEnable(GL_LIGHT0);      
+	glEnable(GL_LIGHT0);     
+	//glDisable(GL_LIGHT0);
 
 	// Optional: define light properties
-	GLfloat light_pos[] = { 0.0f, 5.0f, -2.0f, 1.0f };
+	GLfloat light_pos[] = { 3.0f, 5.0f, -2.0f, 1.0f };
 	glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
 }
 
