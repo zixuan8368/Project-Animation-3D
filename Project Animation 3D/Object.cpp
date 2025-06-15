@@ -78,7 +78,6 @@ void drawChair(float x, float y, float z)
 	glPopMatrix(); //1
 }
 
-
 void drawTable(float x, float y, float z)
 {
 	float brightnessFactor = 0.2f;  // small specular brightness for mild shine
@@ -101,13 +100,13 @@ void drawTable(float x, float y, float z)
 	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
 	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 
-	float legHeight = 4.2;
-	float legSize = 0.18;
+	float legHeight = 6.0;
+	float legSize = 0.5;
 
 
 	glPushMatrix(); //1
 	glTranslatef(x, y, z);
-	drawSphere(1);
+	drawSphere(0.1);
 
 	glPushMatrix(); //2
 	glTranslatef(0.0, legHeight/2, 0.0);
@@ -117,25 +116,25 @@ void drawTable(float x, float y, float z)
 
 	// Drawing front right leg
 	glPushMatrix(); //4
-	glTranslatef(3.0, 0.0, 1.6);
+	glTranslatef(8.0, 0.0, 3.0);
 	drawCube(legSize, legSize, legHeight);
 	glPopMatrix(); //4
 
 	// Drawing front left leg
 	glPushMatrix(); //4
-	glTranslatef(-3.0, 0.0, 1.6);
+	glTranslatef(-8.0, 0.0, 3.0);
 	drawCube(legSize, legSize, legHeight);
 	glPopMatrix(); //4
 
 	// Drawing back right leg
 	glPushMatrix(); //4
-	glTranslatef(3.0, 0.0, -1.6);
+	glTranslatef(8.0, 0.0, -3.0);
 	drawCube(legSize, legSize, legHeight);
 	glPopMatrix(); //4
 
 	// Drawing back left leg
 	glPushMatrix(); //4
-	glTranslatef(-3.0, 0.0, -1.6);
+	glTranslatef(-8.0, 0.0, -3.0);
 	drawCube(legSize, legSize, legHeight);
 	glPopMatrix(); //4
 	glPopMatrix(); //3
@@ -143,18 +142,71 @@ void drawTable(float x, float y, float z)
 
 	// Drawing tabletop
 	glPushMatrix(); //3
-	glTranslatef(0.0, 2.0, 0.0);
-	drawCube(6.25, 3.4, 0.35);
+	glTranslatef(0.0, 2.8, 0.0);
+	drawCube(16.6, 6.5, 0.7);
 	glPopMatrix(); //3
 
 	glPopMatrix(); //2
 	glPopMatrix(); //1
 }
 
-
 void drawCupboard(float x, float y, float z)
 {
+	glPushMatrix();
+	glTranslatef(x, y, z);
 
+	glPushMatrix();
+	glTranslatef(0.0, 8.0, 0.0);
+
+	// Color for main body
+	GLfloat body_ambient[] = { 0.6f, 0.4f, 0.2f, 1.0f };
+	GLfloat body_diffuse[] = { 0.7f, 0.5f, 0.3f, 1.0f };
+	GLfloat body_specular[] = { 0.2f, 0.2f, 0.2f, 1.0f };
+	GLfloat body_shininess[] = { 10.0f };
+	glMaterialfv(GL_FRONT, GL_AMBIENT, body_ambient);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, body_diffuse);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, body_specular);
+	glMaterialfv(GL_FRONT, GL_SHININESS, body_shininess);
+
+	// Main body
+	glPushMatrix();
+	drawCube(7.0f, 2.0f, 16.0f); // length, width, height
+	glPopMatrix();
+
+	//// Shelf inside (middle)
+	//glPushMatrix();
+	//glTranslatef(0.0f, 0.0f, 0.0f); // center shelf
+	//drawCube(3.8f, 1.8f, 0.1f);
+	//glPopMatrix();
+
+	// Color for door
+	GLfloat door_ambient[] = { 0.4f, 0.1f, 0.1f, 1.0f };
+	GLfloat door_diffuse[] = { 0.7f, 0.2f, 0.2f, 1.0f };
+	GLfloat door_specular[] = { 0.2f, 0.1f, 0.1f, 1.0f };
+	GLfloat door_shininess[] = { 10.0f };
+
+	glMaterialfv(GL_FRONT, GL_AMBIENT, door_ambient);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, door_diffuse);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, door_specular);
+	glMaterialfv(GL_FRONT, GL_SHININESS, door_shininess);
+	// Left door
+	glPushMatrix();
+	glTranslatef(-1.8f, 0.0f, 1.05f); // half length left, front
+	drawCube(3.4f, 0.3f, 16.0f);
+	glPopMatrix();
+
+	// Right door
+	glPushMatrix();
+	glTranslatef(1.8f, 0.0f, 1.05f); // half length right, front
+	drawCube(3.4f, 0.3f, 16.0f);
+	glPopMatrix();
+
+	// Rigth door knob
+	// Left door knob
+	// Ok maybe next time
+
+	glPopMatrix();
+	glPopMatrix();
 }
 
 void drawCup(float x, float y, float z)
@@ -181,7 +233,7 @@ void drawOrb(float x, float y, float z) {
 
 	glPushMatrix();
 	glTranslatef(x, y, z);
-	drawSphere(0.5f);
+	drawSphere(0.8f);
 	glPopMatrix();
 
 	// Draw transparent outer shell
@@ -208,7 +260,6 @@ void drawOrb(float x, float y, float z) {
 	glDisable(GL_BLEND);
 }
 
-
 void drawSword(float x, float y, float z)
 {
 	glPushMatrix();
@@ -229,6 +280,12 @@ void drawSword(float x, float y, float z)
 		glPushMatrix();
 		glTranslatef(0.0f, 1.0f, 0.0f);  // move blade upward
 		drawCube(0.1f, 0.3f, 2.0f);      // thin, tall blade
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslatef(0.0, 2.0, 0.0);
+		glRotatef(90.0, 0.0, 1.0, 0.0);
+		drawTriangularPrism(0.3, 0.1, 0.2);
 		glPopMatrix();
 	}
 
@@ -270,7 +327,6 @@ void drawSword(float x, float y, float z)
 
 	glPopMatrix();
 }
-
 
 void drawBaseballBat(float x, float y, float z)
 {

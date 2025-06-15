@@ -4,6 +4,7 @@
 #include "characters.h"
 #include "basicshape.h"
 #include "Object.h"
+#include "room.h"
 
 const int FPS = 60;
 int counter = 0;
@@ -34,6 +35,8 @@ int scene1()
 	//	0.0, 0.0, -2.0,      // Look at center
 	//	0.0, 1.0, 0.0);      // Up vector
 
+	room1();
+
 	float brightnessFactor = 1.1f;  // how much brighter specular is
 	GLfloat mat_specular[4];
 
@@ -54,14 +57,37 @@ int scene1()
 	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
 	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 
+	// Origin of the world, remove it later
 	glPushMatrix();
-	glTranslatef(0.0, 0.0, -5.0);
 	drawSphere(0.1);
 	glPopMatrix();
 	
 	glPushMatrix();
-	glTranslatef(0.0, -2.0, -8.0);
+	glTranslatef(18.0, 0.0, 10.0);
+	glScalef(1.7, 1.7, 1.7);
 	drawSemibot2(0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, mouthAngle[0], isOpen[0], false, legAngle[0], isForward[0]);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(25.0, 0.0, 0.0);
+	glRotatef(-45, 0.0, 1.0, 0.0);
+	glScalef(1.5, 1.5, 1.5);
+	drawCrouchSemibot(0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0);
+	glPopMatrix();
+
+	// Drawing Orb(on the table)
+	glPushMatrix();
+	glTranslatef(25.0, 7.9, 1.0);
+	glScalef(1.1, 1.1, 1.1);
+	drawOrb(0.0, 0.0, 0.0);
+	glPopMatrix();
+
+	// Drawing Sword (leaning on the wall)
+	glPushMatrix();
+	glTranslatef(-26.0, 1.5, 20.0);
+	glRotatef(15.0, 0.0, 0.0, 1.0);
+	glScalef(2.5, 2.5, 2.5);
+	drawSword(0.0, 0.0, 0.0);
 	glPopMatrix();
 
 	counter++;

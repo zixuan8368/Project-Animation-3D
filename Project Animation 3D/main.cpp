@@ -3,8 +3,6 @@
 #include <iostream>
 #include "scene.h"
 
-
-
 void init();
 void display();
 void reshape(int, int);
@@ -22,7 +20,7 @@ const float FIELD_OF_VIEW = 70.0;
 #endif
 
 // Camera position and direction
-float cameraX = 0.0f, cameraY = 0.0f, cameraZ = 5.0f;
+float cameraX = 0.0f, cameraY = 4.0f, cameraZ = 145.0f;
 float pitch = 0.0f, yaw = -90.0f;
 float lastX = 400, lastY = 300;
 bool leftMousePressed = false;
@@ -33,7 +31,7 @@ float lookX = 0.0f, lookY = 0.0f, lookZ = -1.0f;
 
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
-float baseSpeed = 5.0f; // adjustable
+float baseSpeed = 45.0f; // adjustable
 
 void updateCameraDirection() {
 	float radYaw = yaw * M_PI / 180.0f;
@@ -155,8 +153,26 @@ void init()
 	//glDisable(GL_LIGHT0);
 
 	// Optional: define light properties
-	GLfloat light_pos[] = { 3.0f, 5.0f, -2.0f, 1.0f };
+	GLfloat light_pos[] = { 0.0f, 10.0f, 0.0f, 1.0f };
+	GLfloat ambient[] = { 0.6f, 0.6f, 0.6f, 1.0f };
+	GLfloat diffuse[] = { 0.9f, 0.9f, 0.9f, 1.0f };
+	GLfloat specular[] = { 0.5f, 0.5f, 0.5f, 1.0f };
 	glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
+
+	// Fogs
+	glEnable(GL_FOG);
+
+	GLfloat fogColor[] = { 0.0f, 0.0f, 0.0f, 1.0f };  // black fog
+	glFogfv(GL_FOG_COLOR, fogColor);
+
+	glFogi(GL_FOG_MODE, GL_LINEAR);  // Linear fog
+	glFogf(GL_FOG_START, 35.0f);     // Start fading at 90
+	glFogf(GL_FOG_END, 70.0f);      // Fully dark at 100
+
+	glDisable(GL_CULL_FACE);
 }
 
 void display()
@@ -201,7 +217,7 @@ void reshape(int width, int height)
 	//glViewport(0, 0, width, height);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(FIELD_OF_VIEW, 1.0, 2.0, 50.0);
+	gluPerspective(FIELD_OF_VIEW, 1.0, 2.0, 80.0);
 	glMatrixMode(GL_MODELVIEW);
 
 }

@@ -162,3 +162,90 @@ void drawCone(float radius, float height)
 
     gluDeleteQuadric(quad);
 }
+
+void drawTriangularPrism(float length, float width, float height)
+{
+    float lx = length / 2.0f;
+    float wz = width / 2.0f;
+    float h = height;
+
+    glBegin(GL_TRIANGLES);
+    // Front face
+    glNormal3f(0.0f, 0.0f, 1.0f);
+    glVertex3f(-lx, 0.0f, wz);         // Bottom-left
+    glVertex3f(lx, 0.0f, wz);          // Bottom-right
+    glVertex3f(0.0f, h, wz);           // Top-center
+
+    // Back face
+    glNormal3f(0.0f, 0.0f, -1.0f);
+    glVertex3f(-lx, 0.0f, -wz);        // Bottom-left (back)
+    glVertex3f(0.0f, h, -wz);          // Top-center (back)
+    glVertex3f(lx, 0.0f, -wz);         // Bottom-right (back)
+    glEnd();
+
+    glBegin(GL_QUADS);
+    // Bottom face
+    glNormal3f(0.0f, -1.0f, 0.0f);
+    glVertex3f(-lx, 0.0f, -wz);
+    glVertex3f(lx, 0.0f, -wz);
+    glVertex3f(lx, 0.0f, wz);
+    glVertex3f(-lx, 0.0f, wz);
+
+    // Left face
+    glNormal3f(-1.0f, 1.0f, 0.0f); // approximate
+    glVertex3f(-lx, 0.0f, -wz);
+    glVertex3f(-lx, 0.0f, wz);
+    glVertex3f(0.0f, h, wz);
+    glVertex3f(0.0f, h, -wz);
+
+    // Right face
+    glNormal3f(1.0f, 1.0f, 0.0f); // approximate
+    glVertex3f(lx, 0.0f, wz);
+    glVertex3f(lx, 0.0f, -wz);
+    glVertex3f(0.0f, h, -wz);
+    glVertex3f(0.0f, h, wz);
+    glEnd();
+}
+
+void drawPyramid(float length, float width, float height)
+{
+    float lx = length / 2.0f;
+    float lz = width / 2.0f;
+
+    glBegin(GL_TRIANGLES);
+    // Front face
+    glNormal3f(0.0f, 0.5f, 1.0f);
+    glVertex3f(-lx, 0.0f, lz);
+    glVertex3f(lx, 0.0f, lz);
+    glVertex3f(0.0f, height, 0.0f);
+
+    // Right face
+    glNormal3f(1.0f, 0.5f, 0.0f);
+    glVertex3f(lx, 0.0f, lz);
+    glVertex3f(lx, 0.0f, -lz);
+    glVertex3f(0.0f, height, 0.0f);
+
+    // Back face
+    glNormal3f(0.0f, 0.5f, -1.0f);
+    glVertex3f(lx, 0.0f, -lz);
+    glVertex3f(-lx, 0.0f, -lz);
+    glVertex3f(0.0f, height, 0.0f);
+
+    // Left face
+    glNormal3f(-1.0f, 0.5f, 0.0f);
+    glVertex3f(-lx, 0.0f, -lz);
+    glVertex3f(-lx, 0.0f, lz);
+    glVertex3f(0.0f, height, 0.0f);
+    glEnd();
+
+    // Base (drawn separately as a quad)
+    glBegin(GL_QUADS);
+    glNormal3f(0.0f, -1.0f, 0.0f); // Facing downward
+    glVertex3f(-lx, 0.0f, lz);
+    glVertex3f(lx, 0.0f, lz);
+    glVertex3f(lx, 0.0f, -lz);
+    glVertex3f(-lx, 0.0f, -lz);
+    glEnd();
+}
+
+
