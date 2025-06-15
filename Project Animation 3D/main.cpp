@@ -1,4 +1,6 @@
 #include <GL/glut.h>
+#include <cmath>
+#include <iostream>
 #include "scene.h"
 
 
@@ -8,11 +10,110 @@ void display();
 void reshape(int, int);
 void timer(int);
 
+
 int sceneNumber = 1;
 const int TOTAL_SCENE = 9;
 const int FRAME_PER_SECOND = 60;
 const int TIME_PER_FRAME = 1000 / FRAME_PER_SECOND;
 const float FIELD_OF_VIEW = 70.0;
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
+// Camera position and direction
+float cameraX = 0.0f, cameraY = 0.0f, cameraZ = 5.0f;
+float pitch = 0.0f, yaw = -90.0f;
+float lastX = 400, lastY = 300;
+bool leftMousePressed = false;
+float cameraSpeed;
+
+// Look direction
+float lookX = 0.0f, lookY = 0.0f, lookZ = -1.0f;
+
+float deltaTime = 0.0f;
+float lastFrame = 0.0f;
+float baseSpeed = 5.0f; // adjustable
+
+void updateCameraDirection() {
+	float radYaw = yaw * M_PI / 180.0f;
+	float radPitch = pitch * M_PI / 180.0f;
+
+	lookX = cos(radYaw) * cos(radPitch);
+	lookY = sin(radPitch);
+	lookZ = sin(radYaw) * cos(radPitch);
+}
+
+void keyboard(unsigned char key, int x, int y) {
+	cameraSpeed = baseSpeed * deltaTime;
+	float forwardX = lookX * cameraSpeed;
+	float forwardZ = lookZ * cameraSpeed;
+
+	float rightX = -lookZ * cameraSpeed;
+	float rightZ = lookX * cameraSpeed;
+
+	switch (key) {
+	case 'w': cameraX += forwardX; cameraZ += forwardZ; break;
+	case 's': cameraX -= forwardX; cameraZ -= forwardZ; break;
+	case 'a': cameraX -= rightX;   cameraZ -= rightZ;   break;
+	case 'd': cameraX += rightX;   cameraZ += rightZ;   break;
+	case 'q': cameraY += cameraSpeed; break;
+	case 'e': cameraY -= cameraSpeed; break;
+	case 27:  exit(0); // ESC to quit
+	}
+
+	glutPostRedisplay();
+}
+
+void mouseMotion(int x, int y) {
+	if (!leftMousePressed) return;
+
+	float xoffset = x - lastX;
+	float yoffset = lastY - y;
+
+	lastX = x;
+	lastY = y;
+
+	float sensitivity = 0.1f;
+	xoffset *= sensitivity;
+	yoffset *= sensitivity;
+
+	yaw += xoffset;
+	pitch += yoffset;
+
+	if (pitch > 89.0f) pitch = 89.0f;
+	if (pitch < -89.0f) pitch = -89.0f;
+
+	updateCameraDirection();
+	glutPostRedisplay();
+}
+
+void mouseClick(int button, int state, int x, int y) {
+	if (button == GLUT_LEFT_BUTTON) {
+		if (state == GLUT_DOWN) {
+			leftMousePressed = true;
+			lastX = x;
+			lastY = y;
+		}
+		else if (state == GLUT_UP) {
+			leftMousePressed = false;
+		}
+	}
+
+	// Scroll wheel zoom
+	if (button == 3) { // Scroll up
+		cameraX += lookX * cameraSpeed;
+		cameraY += lookY * cameraSpeed;
+		cameraZ += lookZ * cameraSpeed;
+		glutPostRedisplay();
+	}
+	else if (button == 4) { // Scroll down
+		cameraX -= lookX * cameraSpeed;
+		cameraY -= lookY * cameraSpeed;
+		cameraZ -= lookZ * cameraSpeed;
+		glutPostRedisplay();
+	}
+}
 
 
 
@@ -29,10 +130,16 @@ int main(int argc, char** argv)
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
 	glutTimerFunc(TIME_PER_FRAME, timer, 0);
+	glutKeyboardFunc(keyboard);
+	glutMouseFunc(mouseClick);
+	glutMotionFunc(mouseMotion);
+	updateCameraDirection();
+	//glutSetCursor(GLUT_CURSOR_NONE);
 
 	init();
 
 	glutMainLoop();
+	return 0;
 
 }
 
@@ -56,6 +163,10 @@ void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
+
+	gluLookAt(cameraX, cameraY, cameraZ,
+		cameraX + lookX, cameraY + lookY, cameraZ + lookZ,
+		0.0f, 1.0f, 0.0f);
 
 	/*switch (sceneNumber)
 	{
@@ -87,7 +198,7 @@ void display()
 
 void reshape(int width, int height)
 {
-	glViewport(0, 0, width, height);
+	//glViewport(0, 0, width, height);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(FIELD_OF_VIEW, 1.0, 2.0, 50.0);
@@ -98,7 +209,16 @@ void reshape(int width, int height)
 
 void timer(int)
 {
+	//glutPostRedisplay();
+	//glutTimerFunc(TIME_PER_FRAME, timer, 0);
+
+	float currentFrame = glutGet(GLUT_ELAPSED_TIME) / 1000.0f; // seconds
+	deltaTime = currentFrame - lastFrame;
+	lastFrame = currentFrame;
+
 	glutPostRedisplay();
 	glutTimerFunc(TIME_PER_FRAME, timer, 0);
 }
+
+
 

@@ -498,3 +498,122 @@ void drawSemibot2(float x, float y, float z, float r, float g, float b, float ey
 
 }
 
+void drawEnemy3D()
+{
+	GLUquadric* quad = gluNewQuadric();
+
+	// Body (dark cone or cylinder)
+	glPushMatrix();
+	glColor3f(0.1f, 0.1f, 0.1f); // almost black
+	glTranslatef(0.0f, -1.0f, 0.0f);
+	glRotatef(-90, 1, 0, 0); // point upward
+	gluCylinder(quad, 0.5, 0.3, 2.0, 32, 32);
+	glPopMatrix();
+
+	// Face (white disk)
+	glPushMatrix();
+	glColor3f(0.9f, 0.9f, 0.9f);
+	glTranslatef(0.0f, 0.8f, 0.31f); // position in front of head
+	glRotatef(90, 1, 0, 0);
+	gluDisk(quad, 0.0, 0.2, 32, 1);
+	glPopMatrix();
+
+	// Eyes (2 black spheres)
+	for (float x = -0.07f; x <= 0.07f; x += 0.14f) {
+		glPushMatrix();
+		glColor3f(0.0f, 0.0f, 0.0f);
+		glTranslatef(x, 0.85f, 0.32f);
+		glutSolidSphere(0.03, 16, 16);
+		glPopMatrix();
+	}
+
+	// Claws - 3 on each hand (simplified as cones)
+	float clawY = -0.6f;
+	float clawZ = 0.2f;
+	float clawSpacing = 0.05f;
+	for (int i = -1; i <= 1; i++) {
+		float offsetX = i * clawSpacing;
+		// Left hand
+		glPushMatrix();
+		glColor3f(0.6f, 0.6f, 0.6f); // bone color
+		glTranslatef(-0.4f + offsetX, clawY, clawZ);
+		glRotatef(-45, 0, 1, 0);
+		glRotatef(90, 1, 0, 0);
+		gluCylinder(quad, 0.01, 0.0, 0.15, 12, 1);
+		glPopMatrix();
+
+		// Right hand
+		glPushMatrix();
+		glColor3f(0.6f, 0.6f, 0.6f);
+		glTranslatef(0.4f + offsetX, clawY, clawZ);
+		glRotatef(45, 0, 1, 0);
+		glRotatef(90, 1, 0, 0);
+		gluCylinder(quad, 0.01, 0.0, 0.15, 12, 1);
+		glPopMatrix();
+	}
+
+	gluDeleteQuadric(quad);
+}
+
+void drawHuntsman() {
+	GLUquadric* quad = gluNewQuadric();
+
+	// Head (stretched sphere)
+	glPushMatrix();
+	glColor3f(0.9f, 0.7f, 0.6f); // skin tone
+	glTranslatef(0.0f, 1.5f, 0.0f);
+	glScalef(0.4f, 0.8f, 0.4f);
+	glutSolidSphere(1.0, 20, 20);
+	glPopMatrix();
+
+	// Blindfold
+	glPushMatrix();
+	glColor3f(0.4f, 0.0f, 0.0f); // dark red
+	glTranslatef(0.0f, 1.5f, 0.41f);
+	glScalef(0.3f, 0.1f, 0.01f);
+	glutSolidCube(1.0);
+	glPopMatrix();
+
+	// Torso (brown/green jacket)
+	glPushMatrix();
+	glColor3f(0.3f, 0.3f, 0.1f); // dark olive
+	glTranslatef(0.0f, 0.9f, 0.0f);
+	glScalef(0.6f, 0.8f, 0.3f);
+	glutSolidCube(1.0);
+	glPopMatrix();
+
+	// Arms
+	for (float side = -1.0f; side <= 1.0f; side += 2.0f) {
+		glPushMatrix();
+		glColor3f(0.3f, 0.3f, 0.1f);
+		glTranslatef(0.35f * side, 1.0f, 0.0f);
+		glRotatef(90, 1, 0, 0);
+		gluCylinder(quad, 0.05, 0.05, 0.6, 12, 3);
+		glPopMatrix();
+	}
+
+	// Legs
+	for (float side = -0.2f; side <= 0.2f; side += 0.4f) {
+		glPushMatrix();
+		glColor3f(0.2f, 0.1f, 0.1f); // boots
+		glTranslatef(side, 0.1f, 0.0f);
+		glRotatef(-90, 1, 0, 0);
+		gluCylinder(quad, 0.08, 0.08, 0.7, 12, 3);
+		glPopMatrix();
+	}
+
+	// Gun (simple horizontal cylinder)
+	glPushMatrix();
+	glColor3f(0.3f, 0.3f, 0.3f);
+	glTranslatef(0.0f, 0.85f, 0.3f);
+	glRotatef(90, 0, 1, 0);
+	gluCylinder(quad, 0.03, 0.03, 0.6, 12, 2);
+	glPopMatrix();
+
+	gluDeleteQuadric(quad);
+}
+
+void drawRobe(float x, float y, float z, float rotAngle, bool isWalking)
+{
+
+}

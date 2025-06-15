@@ -22,9 +22,9 @@ float b = 0.365;
 
 int scene1()
 {
-	glClearColor(0.0, 0.0, 0.0, 1.0);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glLoadIdentity();
+	//glClearColor(0.0, 0.0, 0.0, 1.0);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glLoadIdentity();
 
 	//// ==== CAMERA ANIMATION ====
 	//float camX = 0.0f;
@@ -56,15 +56,12 @@ int scene1()
 
 	glPushMatrix();
 	glTranslatef(0.0, 0.0, -5.0);
-	//drawSphere(0.1);
+	drawSphere(0.1);
 	glPopMatrix();
 	
 	glPushMatrix();
 	glTranslatef(0.0, -2.0, -8.0);
-	glRotatef(90.0, 0.0, 1.0, 0.0);
-	//glScalef(2.0, 2.0, 2.0);
-	glTranslatef(0.0, 2.0, 8.0);
-	drawOrb(0.0, -2.0, -8.0);
+	drawSemibot2(0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, mouthAngle[0], isOpen[0], false, legAngle[0], isForward[0]);
 	glPopMatrix();
 
 	counter++;
