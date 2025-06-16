@@ -199,8 +199,164 @@ void drawCrouchSemibot(float x, float y, float z, float r, float g, float b, flo
 	glPopMatrix(); //1
 }
 
-void drawHideSemibot()
+void drawLoveSemibot(float r, float g, float b, bool isTalking, float& mouthAngle, bool isWalking, float& legAngle, bool& isForward)
 {
+	float brightnessFactor = 1.1f;  // how much brighter specular is
+	GLfloat mat_specular[4];
+
+	GLfloat mat_ambient[] = { 0.2f, 0.2f, 0.2f, 1.0f };   // ambient color
+	GLfloat mat_diffuse[] = { r, g, b, 1.0f };   // diffuse color (red)
+
+	// Scale diffuse RGB by brightnessFactor but clamp at 1.0
+	for (int i = 0; i < 3; i++) {
+		mat_specular[i] = mat_diffuse[i] * brightnessFactor;
+		if (mat_specular[i] > 1.0f) mat_specular[i] = 1.0f;  // clamp max to 1.0
+	}
+	mat_specular[3] = 1.0f;
+
+	GLfloat mat_shininess[] = { 60.0f };                    // shininess (0-128)
+
+	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+
+	glPushMatrix(); //2
+	glTranslatef(0.0, 0.6, 0.0); // This is to make the center point of the semibots is between the legs
+	
+
+	// Drawing legs
+	glPushMatrix(); //3
+	glTranslatef(0.0, 0.6, 0.0);
+	// Drawing left leg
+	glPushMatrix(); //4
+	if (isWalking)
+	{
+		float angle = legAngle;
+		glRotatef(-angle, 0.0, 0.0, 1.0);
+		if (isForward)
+		{
+			legAngle += 2;
+			if (legAngle >= 20)
+				isForward = false;
+		}
+		else
+		{
+
+			legAngle -= 2;
+			if (legAngle <= -20)
+				isForward = true;
+		}
+	}
+	glPushMatrix(); //5
+	glRotatef(180.0, 1.0, 0.0, 0.0);
+	glRotatef(3.0, 0.0, 0.0, 1.0);
+	glTranslatef(-0.4, 0.0, 0.0);
+	drawCone(0.35, 1.5);
+	glPopMatrix(); //5
+
+	glPopMatrix(); //4
+
+	// Drawing right leg
+	glPushMatrix(); //4
+	if (isWalking)
+	{
+		float angle = legAngle;
+		glRotatef(angle, 0.0, 0.0, 1.0);
+		if (isForward)
+		{
+			legAngle += 2;
+			if (legAngle >= 20)
+				isForward = false;
+		}
+		else
+		{
+
+			legAngle -= 2;
+			if (legAngle <= -20)
+				isForward = true;
+		}
+	}
+	glPushMatrix(); //5
+	glRotatef(180.0, 1.0, 0.0, 0.0);
+	glRotatef(-3.0, 0.0, 0.0, 1.0);
+	glTranslatef(0.4, 0.0, 0.0);
+	drawCone(0.35, 1.5);
+	glPopMatrix(); //5
+
+	glPopMatrix(); //4
+
+	glPopMatrix(); //3
+
+	// Drawing the first lower cylinder
+	glPushMatrix(); //3
+	drawCylinder(1.1, 0.35);
+	glPopMatrix(); //3
+
+	// Drawing the second cylinder above the first cylinder
+	glPushMatrix(); //3
+	glTranslatef(0.0, 0.35, 0.0);
+	drawCylinder(1.0, 0.6);
+	glPopMatrix();	//3
+
+	//Matrix for drawing hands
+	glPushMatrix(); //3
+	glTranslatef(0.0, 0.65, 0.0);
+
+	// Drawing right hand
+	glPushMatrix(); //4
+	if (isWalking)
+	{
+		float angle = legAngle;
+		glRotatef(-angle, 1.0, 0.0, 0.0);
+
+	}
+
+	glPushMatrix(); //5
+	glTranslatef(1.1, 0.0, 0.0);
+	glRotatef(90.0, 1.0, 0.0, 0.0);
+	drawCone(0.18, 1.3);
+	glPopMatrix(); //5
+	glPopMatrix(); //4
+
+	// Drawing left hand
+	glPushMatrix(); //4
+	if (isWalking)
+	{
+		float angle = legAngle;
+		glRotatef(angle, 1.0, 0.0, 0.0);
+	}
+	glPushMatrix(); //5
+	glTranslatef(-1.1, 0.0, 0.0);
+	glRotatef(90.0, 1.0, 0.0, 0.0);
+	drawCone(0.18, 1.3);
+	glPopMatrix(); //5
+	glPopMatrix(); //4
+
+	glPopMatrix(); //3
+
+	// Drawing head
+	glPushMatrix(); //3
+	glTranslatef(0.0, 0.95, -1.0);
+	if (isTalking)
+	{
+		float angle = mouthAngle;
+		glRotatef(-angle, 1.0, 0.0, 0.0);
+		if (mouthAngle <= 42)
+			mouthAngle += 3;
+	}
+	else
+	{
+		float angle = mouthAngle;
+		glRotatef(-angle, 1.0, 0.0, 0.0);
+		if (mouthAngle >= 0)
+			mouthAngle -= 4;
+	}
+	drawHead(0.0, 0.0, 0.0, r, g, b, true, 0.15, -0.9, 0.0, 0.0, 0.0);
+	glPopMatrix(); //3
+
+	glPopMatrix(); //2
+
 
 }
 
@@ -419,6 +575,7 @@ void drawSemibot2(float x, float y, float z, float r, float g, float b, float ey
 				isForward = true;
 		}
 	}
+
 	glPushMatrix(); //5
 	glTranslatef(-0.6, 0.0, 0.0);
 	glRotatef(180.0, 1.0, 0.0, 0.0);
@@ -449,6 +606,12 @@ void drawSemibot2(float x, float y, float z, float r, float g, float b, float ey
 	glTranslatef(0.0, 2.3, 0.0);
 	// Drawing right hand
 	glPushMatrix(); //4
+	if (isWalking)
+	{
+		float angle = legAngle;
+		glRotatef(-angle, 1.0, 0.0, 0.0);
+	
+	}
 	glTranslatef(0.9, 0.0, 0.0);
 	glRotatef(180.0, 1.0, 0.0, 0.0);
 	glRotatef(-15.0, 0.0, 0.0, 1.0);
@@ -457,6 +620,11 @@ void drawSemibot2(float x, float y, float z, float r, float g, float b, float ey
 
 	// Drawing left hand
 	glPushMatrix(); //4
+	if (isWalking)
+	{
+		float angle = legAngle;
+		glRotatef(angle, 1.0, 0.0, 0.0);
+	}
 	glTranslatef(-0.9, 0.0, 0.0);
 	glRotatef(180.0, 1.0, 0.0, 0.0);
 	glRotatef(15.0, 0.0, 0.0, 1.0);
@@ -498,122 +666,3 @@ void drawSemibot2(float x, float y, float z, float r, float g, float b, float ey
 
 }
 
-void drawEnemy3D()
-{
-	GLUquadric* quad = gluNewQuadric();
-
-	// Body (dark cone or cylinder)
-	glPushMatrix();
-	glColor3f(0.1f, 0.1f, 0.1f); // almost black
-	glTranslatef(0.0f, -1.0f, 0.0f);
-	glRotatef(-90, 1, 0, 0); // point upward
-	gluCylinder(quad, 0.5, 0.3, 2.0, 32, 32);
-	glPopMatrix();
-
-	// Face (white disk)
-	glPushMatrix();
-	glColor3f(0.9f, 0.9f, 0.9f);
-	glTranslatef(0.0f, 0.8f, 0.31f); // position in front of head
-	glRotatef(90, 1, 0, 0);
-	gluDisk(quad, 0.0, 0.2, 32, 1);
-	glPopMatrix();
-
-	// Eyes (2 black spheres)
-	for (float x = -0.07f; x <= 0.07f; x += 0.14f) {
-		glPushMatrix();
-		glColor3f(0.0f, 0.0f, 0.0f);
-		glTranslatef(x, 0.85f, 0.32f);
-		glutSolidSphere(0.03, 16, 16);
-		glPopMatrix();
-	}
-
-	// Claws - 3 on each hand (simplified as cones)
-	float clawY = -0.6f;
-	float clawZ = 0.2f;
-	float clawSpacing = 0.05f;
-	for (int i = -1; i <= 1; i++) {
-		float offsetX = i * clawSpacing;
-		// Left hand
-		glPushMatrix();
-		glColor3f(0.6f, 0.6f, 0.6f); // bone color
-		glTranslatef(-0.4f + offsetX, clawY, clawZ);
-		glRotatef(-45, 0, 1, 0);
-		glRotatef(90, 1, 0, 0);
-		gluCylinder(quad, 0.01, 0.0, 0.15, 12, 1);
-		glPopMatrix();
-
-		// Right hand
-		glPushMatrix();
-		glColor3f(0.6f, 0.6f, 0.6f);
-		glTranslatef(0.4f + offsetX, clawY, clawZ);
-		glRotatef(45, 0, 1, 0);
-		glRotatef(90, 1, 0, 0);
-		gluCylinder(quad, 0.01, 0.0, 0.15, 12, 1);
-		glPopMatrix();
-	}
-
-	gluDeleteQuadric(quad);
-}
-
-void drawHuntsman() {
-	GLUquadric* quad = gluNewQuadric();
-
-	// Head (stretched sphere)
-	glPushMatrix();
-	glColor3f(0.9f, 0.7f, 0.6f); // skin tone
-	glTranslatef(0.0f, 1.5f, 0.0f);
-	glScalef(0.4f, 0.8f, 0.4f);
-	glutSolidSphere(1.0, 20, 20);
-	glPopMatrix();
-
-	// Blindfold
-	glPushMatrix();
-	glColor3f(0.4f, 0.0f, 0.0f); // dark red
-	glTranslatef(0.0f, 1.5f, 0.41f);
-	glScalef(0.3f, 0.1f, 0.01f);
-	glutSolidCube(1.0);
-	glPopMatrix();
-
-	// Torso (brown/green jacket)
-	glPushMatrix();
-	glColor3f(0.3f, 0.3f, 0.1f); // dark olive
-	glTranslatef(0.0f, 0.9f, 0.0f);
-	glScalef(0.6f, 0.8f, 0.3f);
-	glutSolidCube(1.0);
-	glPopMatrix();
-
-	// Arms
-	for (float side = -1.0f; side <= 1.0f; side += 2.0f) {
-		glPushMatrix();
-		glColor3f(0.3f, 0.3f, 0.1f);
-		glTranslatef(0.35f * side, 1.0f, 0.0f);
-		glRotatef(90, 1, 0, 0);
-		gluCylinder(quad, 0.05, 0.05, 0.6, 12, 3);
-		glPopMatrix();
-	}
-
-	// Legs
-	for (float side = -0.2f; side <= 0.2f; side += 0.4f) {
-		glPushMatrix();
-		glColor3f(0.2f, 0.1f, 0.1f); // boots
-		glTranslatef(side, 0.1f, 0.0f);
-		glRotatef(-90, 1, 0, 0);
-		gluCylinder(quad, 0.08, 0.08, 0.7, 12, 3);
-		glPopMatrix();
-	}
-
-	// Gun (simple horizontal cylinder)
-	glPushMatrix();
-	glColor3f(0.3f, 0.3f, 0.3f);
-	glTranslatef(0.0f, 0.85f, 0.3f);
-	glRotatef(90, 0, 1, 0);
-	gluCylinder(quad, 0.03, 0.03, 0.6, 12, 2);
-	glPopMatrix();
-
-	gluDeleteQuadric(quad);
-}
-
-void drawRobe(float x, float y, float z, float rotAngle, bool isWalking)
-{
-
-}

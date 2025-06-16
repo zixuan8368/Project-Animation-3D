@@ -3,11 +3,15 @@
 #include <iostream>
 #include "scene.h"
 
+
 void init();
 void display();
 void reshape(int, int);
 void timer(int);
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 int sceneNumber = 1;
 const int TOTAL_SCENE = 9;
@@ -15,12 +19,10 @@ const int FRAME_PER_SECOND = 60;
 const int TIME_PER_FRAME = 1000 / FRAME_PER_SECOND;
 const float FIELD_OF_VIEW = 70.0;
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
+
 
 // Camera position and direction
-float cameraX = 0.0f, cameraY = 4.0f, cameraZ = 145.0f;
+float cameraX = 0.0f, cameraY = 6.0f, cameraZ = 10.0f;
 float pitch = 0.0f, yaw = -90.0f;
 float lastX = 400, lastY = 300;
 bool leftMousePressed = false;
@@ -180,9 +182,7 @@ void display()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
-	gluLookAt(cameraX, cameraY, cameraZ,
-		cameraX + lookX, cameraY + lookY, cameraZ + lookZ,
-		0.0f, 1.0f, 0.0f);
+	//gluLookAt(cameraX, cameraY, cameraZ, cameraX + lookX, cameraY + lookY, cameraZ + lookZ, 0.0f, 1.0f, 0.0f);
 
 	/*switch (sceneNumber)
 	{
@@ -205,9 +205,8 @@ void display()
 		case 9: sceneNumber += scene9();
 				break;
 	}*/
-
-	scene1();
 	
+	scene9();
 
 	glutSwapBuffers();
 }

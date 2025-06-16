@@ -265,6 +265,20 @@ void room1()
 
 void room2()
 {
+	GLfloat concrete_ambient[] = { 0.1f, 0.1f, 0.1f, 1.0f };
+	GLfloat concrete_diffuse[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+	GLfloat concrete_specular[] = { 0.1f, 0.1f, 0.1f, 1.0f };  // Still low for dull surface
+	GLfloat concrete_shininess[] = { 5.0f };                   // Low shininess for matte finish
 
+	glMaterialfv(GL_FRONT, GL_AMBIENT, concrete_ambient);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, concrete_diffuse);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, concrete_specular);
+	glMaterialfv(GL_FRONT, GL_SHININESS, concrete_shininess);
+
+	// Drawing floor
+	glPushMatrix(); //3
+	glTranslatef(0.0, -25.0, 0.0);
+	drawCube(60.0, 60.0, 50.0);
+	glPopMatrix(); //3
 }
 
