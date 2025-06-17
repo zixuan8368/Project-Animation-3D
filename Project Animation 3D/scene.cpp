@@ -26,19 +26,16 @@ float r = 1;
 float g = 1;
 float b = 0.365;
 
+
 int scene1()
 {
-	//glClearColor(0.0, 0.0, 0.0, 1.0);
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//glLoadIdentity();
+	if (counter == 0)
+	{
+		DWORD volume = 0x4CCC4CCC; // 30% volume for both left and right channels
+		waveOutSetVolume(NULL, volume);
+		PlaySound(TEXT("REPO.wav"), NULL, SND_FILENAME | SND_ASYNC);
+	}
 
-	//// ==== CAMERA ANIMATION ====
-	//float camX = 0.0f;
-	//float camY = 0.0f;
-	//float camZ = 5.0f - counter * 0.02;
-	//gluLookAt(camX, camY, camZ,    // Camera position
-	//	0.0, 0.0, -2.0,      // Look at center
-	//	0.0, 1.0, 0.0);      // Up vector
 
 	room1();
 
@@ -117,6 +114,13 @@ int scene3()
 	gluLookAt(camX, camY, camZ, 0.0, 3.0, 135.0 - counter * 0.05, 0.0, 1.0, 0.0);
 	room1();
 
+	if (counter == 0)
+	{
+		DWORD volume = 0x7FFF7FFF; // 50% volume for both left and right channels
+		waveOutSetVolume(NULL, volume);
+		PlaySound(TEXT("Boombox Music.wav"), NULL, SND_FILENAME | SND_ASYNC);
+	}
+
 	// First orb beside the flipped cupboard
 	glPushMatrix();
 	glTranslatef(10.0, 2.0, 125.0);
@@ -179,6 +183,7 @@ int scene3()
 	counter++;
 	if (counter >= 8 * FPS)
 	{
+		PlaySound(NULL, 0, 0); // Stop
 		counter = 0;
 		return 1;
 	}
@@ -268,12 +273,79 @@ int scene6()
 		return 0;
 }
 
+// Blue semibot playing some music and killed by robe
 int scene7()
 {
 
-	counter++;
-	if (counter >= 2 * FPS)
+	// ==== CAMERA ANIMATION ====
+	if(counter <540)
 	{
+		float camX = -23.0f;
+		float camY = 2.0f;
+		float camZ = 25.0f;
+		gluLookAt(camX, camY, camZ, 0.0, 5.0, 21.0, 0.0, 1.0, 0.0);
+	}
+
+	if (counter <= 60)
+	{
+		if (counter == 55)
+		{
+			DWORD volume = 0x7FFF7FFF; // 50% volume for both left and right channels
+			waveOutSetVolume(NULL, volume);
+			PlaySound(TEXT("Robe.wav"), NULL, SND_FILENAME | SND_ASYNC);
+		}
+		glPushMatrix();
+		glTranslatef(0.0, 0.0, 12.0);
+		glScalef(1.7, 1.7, 1.7);
+		glRotatef(0.0, 0.0, 1.0, 0.0);
+		drawSemibot2(0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, false, mouthAngle[1], isOpen[1], false, legAngle[1], isForward[1]);
+		glPopMatrix();
+	}
+	else if(counter <= 400)
+	{	
+		if (counter == 325)
+		{
+			DWORD volume = 0x7FFF7FFF; // 50% volume for both left and right channels
+			waveOutSetVolume(NULL, volume);
+			PlaySound(TEXT("Semibot die.wav"), NULL, SND_FILENAME | SND_ASYNC);
+	}
+		glPushMatrix();
+		glTranslatef(0.0, 0.0, 12 + (counter - 60) * 0.1);
+		glScalef(1.7, 1.7, 1.7);
+		glRotatef(0.0, 0.0, 1.0, 0.0);
+		drawSemibot2(0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, true, mouthAngle[1], isOpen[1], true, legAngle[1], isForward[1]);
+		glPopMatrix();
+	}
+	else
+	{
+		glPushMatrix();
+		glTranslatef(0.0, 10.0 - (counter - 400) * 0.06, 35 - (counter - 400) * 0.3);
+		glScalef(1.4, 1.4, 1.4);
+		glRotatef(counter * 15, 1.0, 1.0, 1.0);
+		drawHead(0.0, 0.0, 0.0, 0.0, 1.0, 0.0, false, 0.0, 0.0, 0.0, 0.0, 0.0);
+		glPopMatrix();
+	}
+
+	if (counter >= 540)
+	{
+		float camX = -19.0f;
+		float camY = 8.0f;
+		float camZ = 20.0f;
+		gluLookAt(camX, camY, camZ, -30.0, 8.0, 20.0, 0.0, 1.0, 0.0);
+		glPushMatrix();
+		glTranslatef(-23.0, 0.0, 20);
+		glScalef(1.7, 1.7, 1.7);
+		glRotatef(90.0, 0.0, 1.0, 0.0);
+		drawSemibot2(0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, mouthAngle[1], isOpen[1], false, legAngle[1], isForward[1]);
+		glPopMatrix();
+	}
+	
+	room1();
+
+	counter++;
+	if (counter >= 10 * FPS)
+	{
+		PlaySound(NULL, 0, 0); // Stop
 		counter = 0;
 		return 1;
 	}
@@ -300,6 +372,7 @@ int scene9()
 {
 	if (temp)
 	{
+		DWORD volume = 0xFFFFFFFF;
 		PlaySound(TEXT("I love.wav"), NULL, SND_FILENAME | SND_ASYNC);
 		temp = false;
 	}
