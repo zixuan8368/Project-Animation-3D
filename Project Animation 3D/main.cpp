@@ -206,7 +206,7 @@ void display()
 				break;
 	}*/
 	
-	scene4();
+	scene7();
 
 	glutSwapBuffers();
 }

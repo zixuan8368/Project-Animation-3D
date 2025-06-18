@@ -260,7 +260,7 @@ int scene4()
 		glTranslatef(-23.0, 0.0, 115);
 		glRotatef(180.0, 0.0, 1.0, 0.0);
 		glScalef(1.7, 1.7, 1.7);
-		drawSemibot2(0.0, 0.0, 0.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, false, mouthAngle[3], isOpen[3], false, legAngle[3], isForward[3]);
+		drawSemibot2(0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -1.0, 0.0, false, mouthAngle[3], isOpen[3], false, legAngle[3], isForward[3]);
 		glPopMatrix();
 	}
 	else if (counter <= 145)
@@ -284,7 +284,7 @@ int scene4()
 	}
 	else if (counter <= 550)
 	{
-		if (counter == 510)
+		if (counter == 490)
 		{
 			DWORD volume = 0x7FFF7FFF; // 50% volume for both left and right channels
 			waveOutSetVolume(NULL, volume);
@@ -300,11 +300,11 @@ int scene4()
 	else if (counter <= 780)
 	{
 		glPushMatrix();
-		glTranslatef(-23.0, 5.0 + (counter - 550) * 0.5, 115);
-		glTranslatef(1.0, 0.0, 0.0);
+		glTranslatef(-23.0, 6.0 + (counter - 550) * 0.5, 115);
+		glTranslatef(0.0, 0.0, 1.0);
 		glRotatef((counter - 550) * 20, 1.0, 0.0, 0.0);
-		glTranslatef(-1.0, 0.0, 0.0);
-		glScalef(1.4, 1.4, 1.4);
+		glScalef(1.7, 1.7, 1.7);
+		glTranslatef(0.0, 0.0, -1.0);
 		drawHead(0.0, 0.0, 0.0, 0.0, 0.0, 1.0, false, 0.0, 0.0, 0.0, 0.0, 0.0);
 		glPopMatrix();
 	}
