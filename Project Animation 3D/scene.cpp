@@ -151,7 +151,6 @@ int scene3()
 	drawSemibot2(0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, true, mouthAngle[1], isOpen[1], true, legAngle[1], isForward[1]);
 	glPopMatrix();
 
-	// Blue semibot, try to pick up the second orb
 	glPushMatrix();
 
 	if (counter <= 185)
@@ -178,6 +177,31 @@ int scene3()
 		drawSemibot2(0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, false, mouthAngle[2], isOpen[2], true, legAngle[2], isForward[2]);
 	}
 
+
+	glPopMatrix();
+
+	// Drawing pink semibot
+	glPushMatrix();
+	glTranslatef(-20.0, 0.0, 95);
+	glRotatef(45.0, 0.0, 1.0, 0.0);
+	glScalef(1.7, 1.7, 1.7);
+	drawSemibot2(0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, false, mouthAngle[3], isOpen[3], false, legAngle[3], isForward[3]);
+	glPopMatrix();
+
+	// Drawing cart
+	glPushMatrix();
+	glTranslatef(-13.0, 0.0, 100);
+	glRotatef(90.0, 0.0, 1.0, 0.0);
+	glScalef(2.2, 1.0, 2.2);
+	drawCart(0.0, 0.0, 0.0);
+	glPopMatrix();
+
+	// Drawing big sword
+	glPushMatrix();
+	glTranslatef(-23.0, 4.0, 100.0);
+	glRotatef(15.0, 0.0, 0.0, 1.0);
+	glScalef(5.0, 8.0, 8.0);
+	drawSword(0.0, 0.0, 0.0);
 	glPopMatrix();
 
 	counter++;
@@ -191,18 +215,180 @@ int scene3()
 		return 0;
 }
 
-
+// The blue semibot breaks the orb and get killed
 int scene4()
 {
 	// ==== CAMERA ANIMATION ====
-	float camX = 23.0f;
-	float camY = 25.0f;
-	float camZ = 105.0f;
-	//gluLookAt(camX, camY, camZ, 0.0, 3.0, 135.0 - counter * 0.05, 0.0, 1.0, 0.0);
+	float camX = 3.0f;
+	float camY = 8.0f;
+	float camZ = 95.0f;
+	gluLookAt(camX, camY, camZ, -13.0, 5.0, 105.0, 0.0, 1.0, 0.0);
+
+	// Pink semibots
+	if (counter <= 650)
+	{
+		glPushMatrix();
+		glTranslatef(-20.0, 0.0, 95);
+		glRotatef(45.0, 0.0, 1.0, 0.0);
+		glScalef(1.7, 1.7, 1.7);
+		drawSemibot2(0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, false, mouthAngle[4], isOpen[4], false, legAngle[4], isForward[4]);
+		glPopMatrix();
+	}
+	else
+	{
+		glPushMatrix();
+		glTranslatef(-20.0, 0.0, 95);
+		glRotatef(45.0, 0.0, 1.0, 0.0);
+		glScalef(1.7, 1.7, 1.7);
+		drawSemibot2(0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, true, mouthAngle[4], isOpen[4], false, legAngle[4], isForward[4]);
+		glPopMatrix();
+
+	}
+
+	if (counter == 660)
+	{
+			DWORD volume = 0x7FFF7FFF; // 50% volume for both left and right channels
+			waveOutSetVolume(NULL, volume);
+			PlaySound(TEXT("uuuu.wav"), NULL, SND_FILENAME | SND_ASYNC);
+	}
+
+
+	// Drawing blue semibot
+	if(counter <= 25)
+	{
+		glPushMatrix();
+		glTranslatef(-23.0, 0.0, 115);
+		glRotatef(180.0, 0.0, 1.0, 0.0);
+		glScalef(1.7, 1.7, 1.7);
+		drawSemibot2(0.0, 0.0, 0.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, false, mouthAngle[3], isOpen[3], false, legAngle[3], isForward[3]);
+		glPopMatrix();
+	}
+	else if (counter <= 145)
+	{
+		// moving eye from down to middle
+		glPushMatrix();
+		glTranslatef(-23.0, 0.0, 115);
+		glRotatef(180.0, 0.0, 1.0, 0.0);
+		glScalef(1.7, 1.7, 1.7);
+		drawSemibot2(0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0 , -1.0 + counter / 125.0, 0.0, false, mouthAngle[3], isOpen[3], false, legAngle[3], isForward[3]);
+		glPopMatrix();
+	}
+	else if(counter <= 325)
+	{
+		glPushMatrix();
+		glTranslatef(-23.0, 0.0, 115);
+		glRotatef(180.0 - (counter - 145) * 0.3, 0.0, 1.0, 0.0);
+		glScalef(1.7, 1.7, 1.7);
+		drawSemibot2(0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, false, mouthAngle[3], isOpen[3], false, legAngle[3], isForward[3]);
+		glPopMatrix();
+	}
+	else if (counter <= 550)
+	{
+		if (counter == 510)
+		{
+			DWORD volume = 0x7FFF7FFF; // 50% volume for both left and right channels
+			waveOutSetVolume(NULL, volume);
+			PlaySound(TEXT("Semibot die.wav"), NULL, SND_FILENAME | SND_ASYNC);
+		}
+		glPushMatrix();
+		glTranslatef(-23.0, 0.0, 115);
+		glRotatef(180.0 - 180 * 0.3, 0.0, 1.0, 0.0);
+		glScalef(1.7, 1.7, 1.7);
+		drawSemibot2(0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, false, mouthAngle[3], isOpen[3], false, legAngle[3], isForward[3]);
+		glPopMatrix();
+	}
+	else if (counter <= 780)
+	{
+		glPushMatrix();
+		glTranslatef(-23.0, 5.0 + (counter - 550) * 0.5, 115);
+		glTranslatef(1.0, 0.0, 0.0);
+		glRotatef((counter - 550) * 20, 1.0, 0.0, 0.0);
+		glTranslatef(-1.0, 0.0, 0.0);
+		glScalef(1.4, 1.4, 1.4);
+		drawHead(0.0, 0.0, 0.0, 0.0, 0.0, 1.0, false, 0.0, 0.0, 0.0, 0.0, 0.0);
+		glPopMatrix();
+	}
+
+	// Drawing orb
+	if(counter <= 25)
+	{
+		glPushMatrix();
+		glTranslatef(-21.0, 3.0, 105.0);
+		glScalef(1.3, 1.3, 1.3);
+		drawOrb(0.0, 0.0, 0.0);
+		glPopMatrix();
+	}
+	else if (counter <= 145)
+	{
+		glPushMatrix();
+		glTranslatef(-21.0, 3.0 + (counter - 75) * 0.05, 105.0);
+		glScalef(1.3, 1.3, 1.3);
+		drawOrb(0.0, 0.0, 0.0);
+		glPopMatrix();
+	}
+	else if (counter <= 300)
+	{	
+		// After that the orb is breaked
+		if (counter == 300)
+		{
+			DWORD volume = 0x7FFF7FFF; // 50% volume for both left and right channels
+			waveOutSetVolume(NULL, volume);
+			PlaySound(TEXT("Vase.wav"), NULL, SND_FILENAME | SND_ASYNC);
+		}
+		glPushMatrix();
+		glTranslatef(-21.0 + (counter - 145) * 0.03, 3.0 + 80 * 0.05, 105.0);
+		glScalef(1.3, 1.3, 1.3);
+		drawOrb(0.0, 0.0, 0.0);
+		glPopMatrix();
+	}
+
+
+	// Drawing gun
+	if (counter >= 400 && counter <= 500)
+	{
+		glPushMatrix();
+		glTranslatef(-20.0, 10.0, 100.0);
+		glRotatef(45 - (counter - 400) * 0.5, 1.0, 0.0, 0.0);
+		glTranslatef(0.0, -5.0, 0.0);
+		glScalef(1.5, 1.5, 1.5);
+		glRotatef(-90.0, 0.0, 1.0, 0.0);
+		drawGun(0.0, 0.0, 0.0);
+		glPopMatrix();
+	}
+	else if(counter >= 500)
+	{
+		glPushMatrix();
+		glTranslatef(-20.0, 10.0, 100.0);
+		glRotatef(45 - 100 * 0.5, 1.0, 0.0, 0.0);
+		glTranslatef(0.0, -5.0, 0.0);
+		glScalef(1.5, 1.5, 1.5);
+		glRotatef(-90.0, 0.0, 1.0, 0.0);
+		drawGun(0.0, 0.0, 0.0);
+		glPopMatrix();
+	}
+
+	// Drawing big sword
+	glPushMatrix();
+	glTranslatef(-23.0, 4.0, 100.0);
+	glRotatef(15.0, 0.0, 0.0, 1.0);
+	glScalef(5.0, 8.0, 8.0);
+	drawSword(0.0, 0.0, 0.0);
+	glPopMatrix();
+
+	// Drawing cart
+	glPushMatrix();
+	glTranslatef(-13.0, 1.0, 105);
+	glRotatef(90.0, 0.0, 1.0, 0.0);
+	glScalef(2.2, 1.0, 2.2);
+	drawCart(0.0, 0.0, 0.0);
+	glPopMatrix();
+
+	room1();
 	
 	counter++;
-	if (counter >= 10 * FPS)
+	if (counter >= 14 * FPS)
 	{
+		PlaySound(NULL, 0, 0); // Stop
 		counter = 0;
 		return 1;
 	}
@@ -318,16 +504,25 @@ int scene7()
 	}
 	else
 	{
+		if (counter == 520)
+		{
+			DWORD volume = 0x7FFF7FFF; // 50% volume for both left and right channels
+			waveOutSetVolume(NULL, volume);
+			PlaySound(TEXT("Vineboom.wav"), NULL, SND_FILENAME | SND_ASYNC);
+		}
 		glPushMatrix();
 		glTranslatef(0.0, 10.0 - (counter - 400) * 0.06, 35 - (counter - 400) * 0.3);
 		glScalef(1.4, 1.4, 1.4);
-		glRotatef(counter * 15, 1.0, 1.0, 1.0);
+		glRotatef(counter * 15, 1.0, 0.0, 0.0);
+		glRotatef(counter * 15, 0.0, 1.0, 0.0);
+		//glRotatef(counter * 15, 0.0, 0.0, 1.0);
 		drawHead(0.0, 0.0, 0.0, 0.0, 1.0, 0.0, false, 0.0, 0.0, 0.0, 0.0, 0.0);
 		glPopMatrix();
 	}
 
 	if (counter >= 540)
 	{
+		
 		float camX = -19.0f;
 		float camY = 8.0f;
 		float camZ = 20.0f;

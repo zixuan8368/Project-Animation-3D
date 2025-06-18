@@ -440,3 +440,92 @@ void drawGun(float x, float y, float z)
 
 	glPopMatrix(); //1
 }
+
+void drawCart(float x, float y, float z)
+{
+	float length = 6.0f;    // X-axis (coffin length)
+	float height = 2.5f;    // Y-axis (coffin height)
+	float width = 2.5f;    // Z-axis (coffin width)
+	float wallThickness = 0.2f;
+	float wheelSize = 0.5f;
+
+	glPushMatrix();
+	glTranslatef(x, y, z);
+
+	// Rotate so coffin is open on top
+	//glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
+
+	// === Wood Material ===
+	GLfloat wood_ambient[] = { 0.2f, 0.1f, 0.0f, 1.0f };
+	GLfloat wood_diffuse[] = { 0.5f, 0.25f, 0.1f, 1.0f };
+	GLfloat wood_specular[] = { 0.1f, 0.1f, 0.1f, 1.0f };
+	GLfloat wood_shininess[] = { 8.0f };
+	glMaterialfv(GL_FRONT, GL_AMBIENT, wood_ambient);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, wood_diffuse);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, wood_specular);
+	glMaterialfv(GL_FRONT, GL_SHININESS, wood_shininess);
+
+	// Bottom
+	glPushMatrix();
+	glTranslatef(0.0f, wallThickness / 2.0f, 0.0f);
+	drawCube(length, width, wallThickness);
+	glPopMatrix();
+
+	// Left wall
+	glPushMatrix();
+	glTranslatef(-length / 2.0f + wallThickness / 2.0f, height / 2.0f, 0.0f);
+	drawCube(wallThickness, width, height);
+	glPopMatrix();
+
+	// Right wall
+	glPushMatrix();
+	glTranslatef(length / 2.0f - wallThickness / 2.0f, height / 2.0f, 0.0f);
+	drawCube(wallThickness, width, height);
+	glPopMatrix();
+
+	// Back wall
+	glPushMatrix();
+	glTranslatef(0.0f, height / 2.0f, -width / 2.0f + wallThickness / 2.0f);
+	drawCube(length, wallThickness, height);
+	glPopMatrix();
+
+	// Front wall
+	glPushMatrix();
+	glTranslatef(0.0f, height / 2.0f, width / 2.0f - wallThickness / 2.0f);
+	drawCube(length, wallThickness, height);
+	glPopMatrix();
+
+	// === Wheels (Using cubes) ===
+	GLfloat wheel_color[] = { 0.1f, 0.1f, 0.1f, 1.0f };  // dark gray
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, wheel_color);
+
+	float wheelY = -wheelSize / 2.0f;
+	float offsetX = length / 2.0f - wheelSize / 2.0f;
+	float offsetZ = width / 2.0f - wheelSize / 2.0f;
+
+	// Front-left wheel
+	glPushMatrix();
+	glTranslatef(-offsetX, wheelY, offsetZ);
+	drawCube(wheelSize, wheelSize, wheelSize);
+	glPopMatrix();
+
+	// Front-right wheel
+	glPushMatrix();
+	glTranslatef(offsetX, wheelY, offsetZ);
+	drawCube(wheelSize, wheelSize, wheelSize);
+	glPopMatrix();
+
+	// Back-left wheel
+	glPushMatrix();
+	glTranslatef(-offsetX, wheelY, -offsetZ);
+	drawCube(wheelSize, wheelSize, wheelSize);
+	glPopMatrix();
+
+	// Back-right wheel
+	glPushMatrix();
+	glTranslatef(offsetX, wheelY, -offsetZ);
+	drawCube(wheelSize, wheelSize, wheelSize);
+	glPopMatrix();
+
+	glPopMatrix();
+}
